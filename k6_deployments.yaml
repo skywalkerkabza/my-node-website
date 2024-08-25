@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k6-load-test
+spec:
+  replicas: 20
+  selector:
+    matchLabels:
+      app: k6-load-test
+  template:
+    metadata:
+      labels:
+        app: k6-load-test
+    spec:
+      containers:
+      - name: k6
+        image: /k6-load-test:enhanced
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+        env:
+          - name: K6_PROMETHEUS
+            value: "true"
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+      restartPolicy: Always
